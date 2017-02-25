@@ -27,6 +27,8 @@ public class MessagePasser {
     private int id;
     private HashSet<TimeStampedMessage> receivedSet;
     private Group mygroup;
+    /*Critical Section that handles the mutex*/
+    private CriticalSection cs;
     /**
      * MessagePasser constructor.
      * initialize local name, clock name
@@ -45,6 +47,7 @@ public class MessagePasser {
         this.size = myConfig.get_NodeMap().keySet().size();
         this.id = myConfig.get_NodeMap().get(this.myName).get_nodeID();
         this.mygroup = myConfig.get_groupMap().get(this.myName);
+        this.cs = new CriticalSection();
         System.out.println("I am " + this.myName + ", my ID is: " + this.id);
         
         /* Use the clock factory to generate clock service. */
@@ -441,5 +444,14 @@ public class MessagePasser {
     public int getId(){
         return this.id;
     }
+    public void handleRequest(){
+    	TimeStampedMessage msg = r_deliver();
+    	cs.handleRequest(msg);
+    }
+    public void sendRequest(TimeStampedMessage msg){
+    	cs.sendRequest(msg);
+    	co_multicast(msg);
+    }
+    
 
 }
