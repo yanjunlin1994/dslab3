@@ -1,6 +1,8 @@
 import java.util.*;
 public class CriticalSection {
 	private boolean Voted = false;
+	private String currentProcess = null;
+	private Queue requestQueue = new LinkedList<String>();
 	
 	public void enterCS(){
 		this.Voted = true;
@@ -14,14 +16,16 @@ public class CriticalSection {
 	public void handleRequest(TimeStampedMessage msg){
 		if (msg.get_kind().equals( "request")){
 			if (this.isLocked()){
-				requestQueue.add(msg.get_source());
+				requestQueue.add(msg.getGroupMessageOrigin());
 			}
 			else {
 				sendAck(msg);
 				this.enterCS();
 			}
 		}
-		else if (msg.get_kind().equals("release") && msg.groupMessageOrigin());
+		else if (msg.get_kind().equals("release") && msg.getGroupMessageOrigin().equals(currentProcess)){
+			
+		}
 	}
 	public void sendAck(TimeStampedMessage msg){
 		
