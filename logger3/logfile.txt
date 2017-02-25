@@ -1,0 +1,32 @@
+>>>>>> These two message are concurrent>>>>
+[clock type:vector][ifLog:true][time stamp:[0, 3, 0, 0]][NO.0][source]daphnie [dest]bob [kind]q3 [content]q3
+[clock type:vector][ifLog:true][time stamp:[0, 0, 1, 0]][NO.0][source]alice [dest]charlie [kind]r1 [content]r1
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+>>>>>> These two message are concurrent>>>>
+[clock type:vector][ifLog:true][time stamp:[0, 3, 0, 0]][NO.0][source]daphnie [dest]bob [kind]q3 [content]q3
+[clock type:vector][ifLog:true][time stamp:[0, 0, 1, 0]][NO.0][source]alice [dest]charlie [kind]r1 [content]r1
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+>>>>>> These two message are concurrent>>>>
+[clock type:vector][ifLog:true][time stamp:[0, 3, 0, 0]][NO.0][source]daphnie [dest]bob [kind]q3 [content]q3
+[clock type:vector][ifLog:true][time stamp:[0, 0, 1, 0]][NO.0][source]alice [dest]charlie [kind]r1 [content]r1
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+>>>>>> These two message are concurrent>>>>
+[clock type:vector][ifLog:true][time stamp:[0, 3, 0, 0]][NO.0][source]daphnie [dest]bob [kind]q3 [content]q3
+[clock type:vector][ifLog:true][time stamp:[0, 0, 1, 0]][NO.0][source]alice [dest]charlie [kind]r1 [content]r1
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+>>>>> These messages are sequential>>>>>>>>
+[clock type:vector][ifLog:true][time stamp:[0, 0, 0, 0]][NO.0][source]bob [dest]charlie [kind]p0 [content]p0
+[clock type:vector][ifLog:true][time stamp:[0, 0, 0, 0]][NO.0][source]bob [dest]charlie [kind]p0 [content]p0
+[clock type:vector][ifLog:true][time stamp:[0, 0, 0, 0]][NO.0][source]daphnie [dest]charlie [kind]q0 [content]q0
+[clock type:vector][ifLog:true][time stamp:[0, 0, 0, 0]][NO.0][source]daphnie [dest]charlie [kind]q0 [content]q0
+[clock type:vector][ifLog:true][time stamp:[0, 0, 0, 0]][NO.0][source]bob [dest]daphnie [kind]p1 [content]p1
+[clock type:vector][ifLog:true][time stamp:[0, 0, 0, 0]][NO.0][source]bob [dest]daphnie [kind]p1 [content]p1
+[clock type:vector][ifLog:true][time stamp:[0, 0, 0, 0]][NO.0][source]alice [dest]daphnie [kind]r0 [content]r0
+[clock type:vector][ifLog:true][time stamp:[0, 0, 0, 0]][NO.0][source]alice [dest]daphnie [kind]r0 [content]r0
+[clock type:vector][ifLog:true][time stamp:[0, 3, 0, 0]][NO.0][source]daphnie [dest]bob [kind]q3 [content]q3
+[clock type:vector][ifLog:true][time stamp:[0, 3, 0, 0]][NO.0][source]daphnie [dest]bob [kind]q3 [content]q3
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+>>>>> These messages are sequential>>>>>>>>
+[clock type:vector][ifLog:true][time stamp:[0, 0, 1, 0]][NO.0][source]alice [dest]charlie [kind]r1 [content]r1
+[clock type:vector][ifLog:true][time stamp:[0, 0, 1, 0]][NO.0][source]alice [dest]charlie [kind]r1 [content]r1
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

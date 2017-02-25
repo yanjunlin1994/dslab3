@@ -1,0 +1,52 @@
+﻿# Defines which nodes are used in the system and how to connect to them.
+# All names must be unique.
+# No other nodes are known.
+# These names will be used for src and dest addresses for the Message
+# The local node’s name is included in this list
+configuration :
+- name : alice
+  ip   : 128.237.207.82
+  port : 12344
+- name : bob
+  ip   : 128.237.207.82
+  port : 14255
+- name : charlie
+  ip   : 128.237.207.82
+  port : 12998
+- name : daphnie
+  ip   : 128.237.207.82
+  port : 1987
+- name : Logger
+  ip   : 128.237.207.82
+  port : 18678
+groups :
+- name : Group1
+  members :
+  - alice
+  - bob
+  - charlie
+# A single, top-level section in the YAML file
+# Group names must be unique
+# Any number of members in the group
+# As many groups as you’d like
+# This is the incoming port on which MP will listen
+# May be ephemeral for further communication as usual
+sendRules :
+  - action : delay # Ack message number 4 from bob to alice will not be sent
+    src    : bob
+    dest   : alice
+    kind   : Ack
+    seqNum : 2000
+receiveRules :
+  - action : delay # Ack message number 4 from bob to alice will not be sent
+    src    : bob
+    dest   : alice
+    kind   : Ack
+    seqNum : 2000
+# 4th message from Charlie that anyone
+# receives will be duplicated
+# For the 8th message from Charlie, only the
+# original will be received.  The duplicate
+# will get dropped
+# Any message from Daphnie will be delivered only
+# after some other message
