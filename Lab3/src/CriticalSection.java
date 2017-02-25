@@ -1,17 +1,6 @@
 import java.util.*;
 public class CriticalSection {
 	private boolean Voted = false;
-	private String currentProcess;
-	private HashSet<String> receivedSet = new HashSet<String>();
-	private Queue<String> requestQueue = new LinkedList<String>();
-	
-	public String getCurrentProcess(){
-		return currentProcess;
-	}
-	
-	public void setCurrentProces(String name){
-		this.currentProcess = name;
-	}
 	
 	public void enterCS(){
 		this.Voted = true;
@@ -22,6 +11,7 @@ public class CriticalSection {
 	public boolean isLocked(){
 		return this.Voted;
 	}
+<<<<<<< HEAD
 	public void handleRequest(TimeStampedMessage msg){
 		if (msg.get_kind().equals( "request")){
 			if (this.isLocked()){
@@ -37,4 +27,6 @@ public class CriticalSection {
 	public void sendAck(TimeStampedMessage msg){
 		
 	}
+=======
+>>>>>>> parent of 4b5e617... template
 }
