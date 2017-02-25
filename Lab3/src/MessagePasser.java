@@ -26,6 +26,7 @@ public class MessagePasser {
     /* my id (define the position in vector clock */
     private int id;
     private HashSet<TimeStampedMessage> receivedSet;
+    private Group mygroup;
     /**
      * MessagePasser constructor.
      * initialize local name, clock name
@@ -43,6 +44,7 @@ public class MessagePasser {
         this.myConfig = new Configuration(configuration_filename);
         this.size = myConfig.get_NodeMap().keySet().size();
         this.id = myConfig.get_NodeMap().get(this.myName).get_nodeID();
+        this.mygroup = myConfig.get_groupMap().get(this.myName);
         System.out.println("I am " + this.myName + ", my ID is: " + this.id);
         
         /* Use the clock factory to generate clock service. */
