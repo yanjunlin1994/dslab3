@@ -12,6 +12,7 @@ public class CriticalSection {
 		return this.Voted;
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 	public void handleRequest(TimeStampedMessage msg){
 		if (msg.get_kind().equals( "request")){
 			if (this.isLocked()){
@@ -27,6 +28,8 @@ public class CriticalSection {
 	public void sendAck(TimeStampedMessage msg){
 		
 	}
+=======
+>>>>>>> parent of 4b5e617... template
 =======
 >>>>>>> parent of 4b5e617... template
 }
