@@ -72,7 +72,7 @@ public class MessagePasser {
             if (newMes.get_dest().equals("R")&&newMes.get_kind().equals("R")){
                 TimeStampedMessage rmsg = co_deliver();
                 System.out.println("+++++++++++++++++" + rmsg);
-                if (rmsg.get_log()){
+                if (rmsg != null && rmsg.get_log()){
                     TimeStampedMessage toLogMessage =  new TimeStampedMessage(rmsg.get_source(),rmsg.get_dest(),
                             "[LOG]","[LOG]", true, rmsg.get_mult());//just to see my time stamp
                     toLogMessage.setVectorMes(clockservice, clockservice.get_size(), clockservice.get_id(), clockservice.get_type());

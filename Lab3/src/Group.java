@@ -104,6 +104,7 @@ public class Group {
     				if (member_id!=msg.getId() && msg_time[member_id]>groupClock.getTimeStamp(member_id)){
     				    //whether add back to hold back Q??
     					valid = false;
+    					addToHoldBackQ(msg);
     					break;
     				}
     			}
