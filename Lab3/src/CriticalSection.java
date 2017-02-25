@@ -11,8 +11,6 @@ public class CriticalSection {
 	public boolean isLocked(){
 		return this.Voted;
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
 	public void handleRequest(TimeStampedMessage msg){
 		if (msg.get_kind().equals( "request")){
 			if (this.isLocked()){
@@ -23,13 +21,9 @@ public class CriticalSection {
 				this.enterCS();
 			}
 		}
-		else if (msg.get_kind().equals("release") && msg.groupMessageOrigin())
+		else if (msg.get_kind().equals("release") && msg.groupMessageOrigin());
 	}
 	public void sendAck(TimeStampedMessage msg){
 		
 	}
-=======
->>>>>>> parent of 4b5e617... template
-=======
->>>>>>> parent of 4b5e617... template
 }
