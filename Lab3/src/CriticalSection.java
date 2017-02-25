@@ -32,7 +32,7 @@ public class CriticalSection {
 				this.enterCS();
 			}
 		}
-		if (msg.get_kind().equals(""))
+		else if (msg.get_kind().equals("release") && msg.groupMessageOrigin())
 	}
 	public void sendAck(TimeStampedMessage msg){
 		
