@@ -1,8 +1,13 @@
 import java.util.*;
 public class CriticalSection {
-    private boolean Voted = false;
-    private String currentProcess = null;
-    private Queue requestQueue = new LinkedList<String>();
+    private boolean Voted;
+    private String currentProcess;
+    private Queue requestQueue;
+    public CriticalSection() {
+        this.Voted = false;
+        this.currentProcess = null;
+        this.requestQueue = new LinkedList<String>();
+    }
     
     public void enterCS(){
         this.Voted = true;
