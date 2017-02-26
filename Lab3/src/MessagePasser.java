@@ -423,8 +423,21 @@ public class MessagePasser {
         return null;
     }
     public void handleRequest(){
+<<<<<<< HEAD
+              TimeStampedMessage msg = r_deliver();
+              cs.handleMessage(msg);
+=======
          TimeStampedMessage msg = r_deliver();
+<<<<<<< HEAD
          this.myCriticalSec.handleRequest(msg);
+=======
+         cs.handleRequest(msg);
+>>>>>>> origin/master
+    }
+    public void sendRequest(TimeStampedMessage msg){
+         cs.sendRequest(msg);
+         co_multicast(msg);
+>>>>>>> fa184c572b1e2fbb69410c4367efe3ca455c83c1
     }
     
     
