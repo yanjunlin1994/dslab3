@@ -27,8 +27,21 @@ public class MessagePasser {
     private int id;
     private HashSet<TimeStampedMessage> receivedSet;
     private Group mygroup;
-    /*Critical Section that handles the mutex*/
-    private CriticalSection cs;
+    
+    
+    /* Critical Section that handles the mutex */
+    private CriticalSection myCriticalSec;
+    /* Critical section's parameter */
+    /**
+     * -1 : not request
+     * 0 : waiting
+     * 1 : entered
+     * 2 : release
+     */ 
+    private int requestStatus; 
+    private ArrayList<String> ackList;
+    
+    
     /**
      * MessagePasser constructor.
      * initialize local name, clock name
@@ -47,7 +60,11 @@ public class MessagePasser {
         this.size = myConfig.get_NodeMap().keySet().size();
         this.id = myConfig.get_NodeMap().get(this.myName).get_nodeID();
         this.mygroup = myConfig.get_groupMap().get(this.myName);
-        this.cs = new CriticalSection();
+        /*critical section */
+        this.myCriticalSec = new CriticalSection();
+        this.requestStatus = -1; 
+        this.ackList = new ArrayList<String>(3);
+        
         System.out.println("I am " + this.myName + ", my ID is: " + this.id);
         
         /* Use the clock factory to generate clock service. */
@@ -102,12 +119,36 @@ public class MessagePasser {
             }
             if (newMes.get_mult()) {
                 /* multicast the message */
-                co_multicast(newMes);
+                if (newMes.get_kind().equals("request")) {
+                    sendRequest(newMes);
+                } else if (newMes.get_kind().equals("release")) {
+                    sendRelease(newMes);
+                } else {
+                    co_multicast(newMes);
+                }
             } else {
                 normal_send(newMes);        
             } 
         }
     }
+    /**
+     * wrapper for send request for critical section.
+     * @param msg
+     */
+    public void sendRequest(TimeStampedMessage msg){
+        this.requestStatus = 0;
+        this.ackList.clear();
+        co_multicast(msg);
+   }
+    /**
+     * wrapper for send release for critical section.
+     * @param msg
+     */
+    public void sendRelease(TimeStampedMessage msg){
+        this.requestStatus = -1;
+        this.ackList.clear();
+        co_multicast(msg);
+   }
     
     /**
      * Send message to a particular destination.
@@ -324,13 +365,30 @@ public class MessagePasser {
         if (!receiveQueue.isEmpty()){
             msg = receiveQueue.poll();
             if (!(msg.get_mult())) {
-                this.clockservice.Synchronize(msg);
-                System.out.println("++++++++Normal message:" + msg);
-                System.out.println("[1st layer]receive() Normal message" + " clock service" + this.clockservice);
+                if (msg.get_kind().equals("ack")) {
+                    //receive the ack for groupmembers!
+                    checkAndAddSet(msg);
+                } else {
+                    this.clockservice.Synchronize(msg);
+                    System.out.println("++++++++Normal message:" + msg);
+                    System.out.println("[1st layer]receive() Normal message" + " clock service" + this.clockservice);
+                }
                 return null;
             }
         }
         return msg;
+    }
+    private void checkAndAddSet(TimeStampedMessage msg) {
+        String srcName = msg.get_source();
+        if ((requestStatus == 0) && (this.mygroup.getMember(srcName) != null) && (!(ackList.contains(srcName)))) {
+            ackList.add(srcName);
+            System.out.println("[Receive ack from " + srcName +  " ]");
+            if (ackList.size() ==  this.mygroup.getSize()) {
+                System.out.println("[Receive all acks! ]");
+                this.requestStatus = 1;
+                System.out.println("[enter critical Section]");
+            }
+        }
     }
     /**
      * Call receive().
@@ -370,13 +428,18 @@ public class MessagePasser {
               cs.handleMessage(msg);
 =======
          TimeStampedMessage msg = r_deliver();
+<<<<<<< HEAD
+         this.myCriticalSec.handleRequest(msg);
+=======
          cs.handleRequest(msg);
 >>>>>>> origin/master
     }
     public void sendRequest(TimeStampedMessage msg){
          cs.sendRequest(msg);
          co_multicast(msg);
+>>>>>>> fa184c572b1e2fbb69410c4367efe3ca455c83c1
     }
+    
     
     
     /**
