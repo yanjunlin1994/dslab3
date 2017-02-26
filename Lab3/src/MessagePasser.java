@@ -278,7 +278,7 @@ public class MessagePasser {
         }   
     }
     public TimeStampedMessage co_deliver(){
-        System.out.println("[4th layer]co_deliver()");
+//        System.out.println("[4th layer]co_deliver()");
         TimeStampedMessage msg;
         for (Group gr: myConfig.get_groupMap().values()) {
             msg = gr.pollFromHoldBackQ();
@@ -302,7 +302,7 @@ public class MessagePasser {
      * casual ordering multicast
      */
     public void co_multicast(TimeStampedMessage msg){
-        System.out.println("[2nd layer]co_multicast");
+//        System.out.println("[2nd layer]co_multicast");
     	Group group = myConfig.get_groupMap().get((msg.getGroupName()));
     	ClockService groupClock = group.getClock();
     	/* use the group clock to generate the clock in message.
@@ -322,7 +322,7 @@ public class MessagePasser {
      * basic multicast
      */
     public void b_multicast(TimeStampedMessage nm) {
-        System.out.println("[1st layer]b_multicast()");
+//        System.out.println("[1st layer]b_multicast()");
         Group sendGroup = myConfig.groupMap.get(nm.getGroupName());
         for (Node a: sendGroup.getMembers()) {
             /* clone message and set correct destination */
@@ -402,7 +402,7 @@ public class MessagePasser {
      * @return
      */
     public synchronized TimeStampedMessage receive(){
-        System.out.println("[1st layer]receive()");
+//        System.out.println("[1st layer]receive()");
         TimeStampedMessage msg = null;
         if (!receiveQueue.isEmpty()){
             msg = receiveQueue.poll();
@@ -437,7 +437,7 @@ public class MessagePasser {
      * @return
      */
     public TimeStampedMessage b_deliver(){
-        System.out.println("[2nd layer]b_deliver()");
+//        System.out.println("[2nd layer]b_deliver()");
         return this.receive();
     }
     /**
@@ -445,11 +445,11 @@ public class MessagePasser {
      * @return
      */
     public TimeStampedMessage r_deliver() {
-        System.out.println("[3rd layer]r_deliver()");
+//        System.out.println("[3rd layer]r_deliver()");
         TimeStampedMessage msg;
         while ((msg = b_deliver()) != null) {
             if (!(this.contain(this.receivedSet, msg))) {// this message is received for the first time
-                System.out.println("[3st layer]r_deliver() add to set");
+//                System.out.println("[3st layer]r_deliver() add to set");
                 receivedSet.add(msg);
                 if (!(msg.get_source().equals(this.myName))) {
                     b_multicast(msg);
