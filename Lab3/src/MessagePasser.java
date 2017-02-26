@@ -366,7 +366,7 @@ public class MessagePasser {
     }
     public void handleRequest(){
               TimeStampedMessage msg = r_deliver();
-              cs.handleRequest(msg);
+              cs.handleMessage(msg);
     }
     public void sendRequest(TimeStampedMessage msg){
          cs.sendRequest(msg);
