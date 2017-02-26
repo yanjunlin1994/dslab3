@@ -9,9 +9,7 @@
 /MainTest.class
 /Message.class
 /MessagePasser.class
-/Network.class
 /Node.class
-/Receive.class
 /Rule.class
 /TimeStampedMessage.class
 /VectorClock.class

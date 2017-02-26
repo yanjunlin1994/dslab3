@@ -30,7 +30,6 @@ public class MessagePasser {
     
     
     /* Critical Section that handles the mutex */
-    private CriticalSection myCriticalSec;
     /* Critical section's parameter */
     /**
      * -1 : not request
@@ -40,6 +39,8 @@ public class MessagePasser {
      */ 
     private int requestStatus; 
     private ArrayList<String> ackList;
+    private boolean voted;
+    private Queue<String> requestQueue;
     
     
     /**
@@ -61,9 +62,10 @@ public class MessagePasser {
         this.id = myConfig.get_NodeMap().get(this.myName).get_nodeID();
         this.mygroup = myConfig.get_groupMap().get(this.myName);
         /*critical section */
-        this.myCriticalSec = new CriticalSection();
         this.requestStatus = -1; 
         this.ackList = new ArrayList<String>(3);
+        this.voted = false;
+        this.requestQueue =  new ArrayDeque<String>(10);
         
         System.out.println("I am " + this.myName + ", my ID is: " + this.id);
         
@@ -94,7 +96,11 @@ public class MessagePasser {
             if (newMes.get_dest().equals("R")&&newMes.get_kind().equals("R")){
                 TimeStampedMessage rmsg = co_deliver();
                 System.out.println("+++++++++++++++++" + rmsg);
-                
+                if (rmsg != null && rmsg.get_kind().equals("request")) {
+                    handleRequest(rmsg);  
+                } else if (rmsg != null && rmsg.get_kind().equals("release")) {
+                    handleRelease(rmsg);  
+                }
                 if (rmsg != null && rmsg.get_log()){
                     TimeStampedMessage toLogMessage =  new TimeStampedMessage(rmsg.get_source(),rmsg.get_dest(),
                             "[LOG]","[LOG]", true, rmsg.get_mult());//just to see my time stamp
@@ -131,6 +137,42 @@ public class MessagePasser {
             } 
         }
     }
+    /**
+     * handle request from other members
+     * @param rmsg
+     */
+    public void handleRequest(TimeStampedMessage rmsg) {
+        System.out.println("[HandleRequest]This is a request message from " + rmsg.getGroupMessageOrigin());
+        if (this.voted){
+            System.out.println("[HandleRequest]I have already voted, add to waitqueue");
+            requestQueue.add(rmsg.getGroupMessageOrigin());
+        }
+        else {
+            System.out.println("[HandleRequest]I have not voted, send ack");
+            sendAck(rmsg.getGroupMessageOrigin());
+            this.voted = true;
+        }
+    }
+    public void handleRelease(TimeStampedMessage rmsg) {
+        System.out.println("[handleRelease]This is a release message from " + rmsg.getGroupMessageOrigin());
+        if (!requestQueue.isEmpty()){
+            System.out.println("[handleRelease]send ack to one waiting process");
+            String dest = requestQueue.poll();
+            sendAck(dest);
+            this.voted = true;
+        }
+        else {
+            this.voted = false;   
+        }
+    }
+    public void sendAck(String requester) {
+        TimeStampedMessage msg = new TimeStampedMessage(this.myName, requester, "ack", " ", false,false);
+        msg.setVectorMes(this.clockservice, this.size, this.id, this.myClock);
+        normal_send(msg);
+    }
+    
+    
+    
     /**
      * wrapper for send request for critical section.
      * @param msg
@@ -382,11 +424,11 @@ public class MessagePasser {
         String srcName = msg.get_source();
         if ((requestStatus == 0) && (this.mygroup.getMember(srcName) != null) && (!(ackList.contains(srcName)))) {
             ackList.add(srcName);
-            System.out.println("[Receive ack from " + srcName +  " ]");
+            System.out.println("==============[Receive ack from " + srcName +  " ]");
             if (ackList.size() ==  this.mygroup.getSize()) {
-                System.out.println("[Receive all acks! ]");
+                System.out.println("=========[Receive all acks! ]");
                 this.requestStatus = 1;
-                System.out.println("[enter critical Section]");
+                System.out.println("======[enter critical Section]");
             }
         }
     }
@@ -422,24 +464,6 @@ public class MessagePasser {
         }
         return null;
     }
-    public void handleRequest(){
-<<<<<<< HEAD
-              TimeStampedMessage msg = r_deliver();
-              cs.handleMessage(msg);
-=======
-         TimeStampedMessage msg = r_deliver();
-<<<<<<< HEAD
-         this.myCriticalSec.handleRequest(msg);
-=======
-         cs.handleRequest(msg);
->>>>>>> origin/master
-    }
-    public void sendRequest(TimeStampedMessage msg){
-         cs.sendRequest(msg);
-         co_multicast(msg);
->>>>>>> fa184c572b1e2fbb69410c4367efe3ca455c83c1
-    }
-    
     
     
     /**
